@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>মিম্মির সংসার</title>
+  <title>ডিজিটাল সংসার</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -12,137 +12,140 @@
     }
   </script>
 </head>
-<body class="bg-amber-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans pb-10 transition-colors duration-300">
+<body class="bg-amber-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans pb-10 flex flex-col justify-between transition-colors duration-300">
 
-  <!-- হেডার -->
-  <header class="bg-emerald-700 dark:bg-emerald-900 text-white shadow-md py-6 px-4">
-    <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
-      <div>
-        <h1 class="text-3xl font-bold tracking-wide">🏡 মিম্মির সংসার</h1>
-        <p class="text-emerald-100 dark:text-emerald-200 text-sm mt-1">দৈনন্দিন আয়-ব্যয়ের সহজ হিসাব</p>
-      </div>
-      
-      <!-- কন্ট্রোলস: ডার্ক মোড ও মাস ফিল্টার -->
-      <div class="flex items-center gap-3">
-        <button id="themeToggle" title="ডার্ক/লাইট মোড টগল" class="bg-emerald-800 dark:bg-emerald-800 hover:bg-emerald-600 border border-emerald-500 rounded-lg p-2 text-sm flex items-center gap-1 transition-colors">
-          <span id="themeIcon">🌙</span>
-        </button>
-
-        <div class="flex items-center gap-2">
-          <input type="month" id="monthFilter" class="bg-emerald-800 dark:bg-emerald-800 text-white border border-emerald-500 rounded-lg px-3 py-1.5 text-sm focus:outline-none cursor-pointer">
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <main class="max-w-4xl mx-auto px-4 mt-8 space-y-8">
-
-    <!-- হিসাবের সামারি কার্ড -->
-    <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-      <!-- মোট আয় -->
-      <div class="bg-white dark:bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-5 shadow-sm transition-colors">
-        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট আয়</p>
-        <p id="totalIncome" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">৳ 0</p>
-      </div>
-      <!-- মোট ব্যয় -->
-      <div class="bg-white dark:bg-slate-800 border-l-4 border-rose-500 rounded-xl p-5 shadow-sm transition-colors">
-        <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট ব্যয়</p>
-        <p id="totalExpense" class="text-2xl font-bold text-rose-600 dark:text-rose-400 mt-2">৳ 0</p>
-      </div>
-      <!-- অবশিষ্ট/ঘাটতি -->
-      <div id="balanceCard" class="bg-white dark:bg-slate-800 border-l-4 border-blue-500 rounded-xl p-5 shadow-sm transition-colors">
-        <p id="balanceLabel" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">জমা / স্থিতিপত্র</p>
-        <p id="netBalance" class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">৳ 0</p>
-      </div>
-    </section>
-
-    <!-- ইনপুট ফর্ম -->
-    <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-amber-100 dark:border-slate-700 transition-colors">
-      <h2 id="formTitle" class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">নতুন এন্ট্রি যোগ করুন</h2>
-      
-      <form id="transactionForm" class="space-y-4">
-        <input type="hidden" id="editId" value="">
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <!-- বিবরণ -->
-          <div class="md:col-span-2">
-            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">বিবরণ (বিভাগসহ)</label>
-            <input type="text" id="title" placeholder="যেমন: বাজার খরচ - মাছ ও সবজি" required
-              class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
-          </div>
-
-          <!-- পরিমাণ -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">টাকার পরিমাণ</label>
-            <input type="number" id="amount" placeholder="৳ ০.০০" required min="1" step="any"
-              class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
-          </div>
-
-          <!-- লেনদেনের ধরন -->
-          <div>
-            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">ধরণ</label>
-            <select id="type" required class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
-              <option value="expense">ব্যয় (Expense)</option>
-              <option value="income">আয় (Income)</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- কুইক সিলেক্ট ট্যাগ (বিবরণে সহজে ফিল্ড যোগ করার জন্য) -->
+  <div>
+    <!-- হেডার -->
+    <header class="bg-emerald-700 dark:bg-emerald-900 text-white shadow-md py-6 px-4">
+      <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
-          <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 mr-2">দ্রুত বিবরণ সিলেক্ট করুন:</span>
-          <div class="inline-flex flex-wrap gap-1.5 mt-1">
-            <button type="button" onclick="setQuickTag('আইদিনের খরচ')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 transition-colors">আইদিনের খরচ</button>
-            <button type="button" onclick="setQuickTag('বাজার খরচ')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 transition-colors">বাজার খরচ</button>
-            <button type="button" onclick="setQuickTag('গাড়ি ভাড়া')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 transition-colors">গাড়ি ভাড়া</button>
-            <button type="button" onclick="setQuickTag('ইউটিলিটি বিল')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 transition-colors">ইউটিলিটি বিল</button>
-            <button type="button" onclick="setQuickTag('মেডিকেল')" class="text-xs bg-slate-100 dark:bg-slate-700 hover:bg-emerald-100 dark:hover:bg-emerald-900 text-slate-700 dark:text-slate-200 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-600 transition-colors">মেডিকেল</button>
+          <h1 class="text-3xl font-bold tracking-wide">🏡 ডিজিটাল সংসার</h1>
+          <p class="text-emerald-100 dark:text-emerald-200 text-sm mt-1">দৈনন্দিন আয়-ব্যয়ের সহজ হিসাব</p>
+        </div>
+        
+        <!-- কন্ট্রোলস: ডার্ক মোড ও মাস ফিল্টার -->
+        <div class="flex items-center gap-3">
+          <button id="themeToggle" title="ডার্ক/লাইট মোড টগল" class="bg-emerald-800 dark:bg-emerald-800 hover:bg-emerald-600 border border-emerald-500 rounded-lg p-2 text-sm flex items-center gap-1 transition-colors">
+            <span id="themeIcon">🌙</span>
+          </button>
+
+          <div class="flex items-center gap-2">
+            <input type="month" id="monthFilter" class="bg-emerald-800 dark:bg-emerald-800 text-white border border-emerald-500 rounded-lg px-3 py-1.5 text-sm focus:outline-none cursor-pointer">
           </div>
         </div>
-
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
-          <!-- তারিখ -->
-          <div class="md:col-span-2">
-            <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">তারিখ</label>
-            <input type="date" id="date" required class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
-          </div>
-
-          <!-- সাবমিট বোতাম -->
-          <div class="md:col-span-2 flex items-end gap-2">
-            <button type="submit" id="submitBtn"
-              class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2 rounded-lg transition-colors">
-              ডাটা সেভ করুন
-            </button>
-            <button type="button" id="cancelEditBtn" class="hidden bg-slate-400 hover:bg-slate-500 text-white font-medium px-4 py-2 rounded-lg transition-colors">
-              বাতিল
-            </button>
-          </div>
-        </div>
-      </form>
-    </section>
-
-    <!-- লেনদেনের ইতিহাস -->
-    <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-amber-100 dark:border-slate-700 transition-colors">
-      <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">দৈনন্দিন লেনদেনের তালিকা</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase">
-              <th class="py-3 px-2">তারিখ</th>
-              <th class="py-3 px-2">বিবরণ (ক্ষেত্র)</th>
-              <th class="py-3 px-2">ধরন</th>
-              <th class="py-3 px-2 text-right">পরিমাণ</th>
-              <th class="py-3 px-2 text-center">অ্যাকশন</th>
-            </tr>
-          </thead>
-          <tbody id="transactionList" class="divide-y divide-slate-100 dark:divide-slate-700 text-sm">
-            <!-- ডাইনামিকালি এন্ট্রি শো হবে -->
-          </tbody>
-        </table>
       </div>
-    </section>
+    </header>
 
-  </main>
+    <main class="max-w-4xl mx-auto px-4 mt-8 space-y-8">
+
+      <!-- হিসাবের সামারি কার্ড -->
+      <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- মোট আয় -->
+        <div class="bg-white dark:bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-5 shadow-sm transition-colors">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট আয়</p>
+          <p id="totalIncome" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">৳ 0</p>
+        </div>
+        <!-- মোট ব্যয় -->
+        <div class="bg-white dark:bg-slate-800 border-l-4 border-rose-500 rounded-xl p-5 shadow-sm transition-colors">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট ব্যয়</p>
+          <p id="totalExpense" class="text-2xl font-bold text-rose-600 dark:text-rose-400 mt-2">৳ 0</p>
+        </div>
+        <!-- অবশিষ্ট/ঘাটতি -->
+        <div id="balanceCard" class="bg-white dark:bg-slate-800 border-l-4 border-blue-500 rounded-xl p-5 shadow-sm transition-colors">
+          <p id="balanceLabel" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">জমা / স্থিতিপত্র</p>
+          <p id="netBalance" class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">৳ 0</p>
+        </div>
+      </section>
+
+      <!-- ইনপুট ফর্ম -->
+      <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-amber-100 dark:border-slate-700 transition-colors">
+        <h2 id="formTitle" class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">নতুন এন্ট্রি যোগ করুন</h2>
+        
+        <form id="transactionForm" class="space-y-4">
+          <input type="hidden" id="editId" value="">
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <!-- বিবরণ -->
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">বিবরণ</label>
+              <input type="text" id="title" placeholder="বিবরণ লিখুন (যেমন: বাজার খরচ, গাড়ি ভাড়া)" required
+                class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
+            </div>
+
+            <!-- পরিমাণ -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">টাকার পরিমাণ</label>
+              <input type="number" id="amount" placeholder="৳ ০.০০" required min="1" step="any"
+                class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
+            </div>
+
+            <!-- লেনদেনের ধরন -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">ধরণ</label>
+              <select id="type" required class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
+                <option value="expense">ব্যয় (Expense)</option>
+                <option value="income">আয় (Income)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-4 gap-3">
+            <!-- তারিখ -->
+            <div class="md:col-span-2">
+              <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">তারিখ</label>
+              <input type="date" id="date" required class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
+            </div>
+
+            <!-- সাবমিট বোতাম -->
+            <div class="md:col-span-2 flex items-end gap-2">
+              <button type="submit" id="submitBtn"
+                class="flex-1 bg-emerald-700 hover:bg-emerald-800 text-white font-medium py-2 rounded-lg transition-colors">
+                ডাটা সেভ করুন
+              </button>
+              <button type="button" id="cancelEditBtn" class="hidden bg-slate-400 hover:bg-slate-500 text-white font-medium px-4 py-2 rounded-lg transition-colors">
+                বাতিল
+              </button>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- লেনদেনের ইতিহাস -->
+      <section class="bg-white dark:bg-slate-800 rounded-xl shadow-sm p-6 border border-amber-100 dark:border-slate-700 transition-colors">
+        <h2 class="text-lg font-bold text-slate-700 dark:text-slate-200 mb-4">দৈনন্দিন লেনদেনের তালিকা</h2>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse">
+            <thead>
+              <tr class="border-b border-slate-200 dark:border-slate-700 text-slate-500 dark:text-slate-400 text-xs font-semibold uppercase">
+                <th class="py-3 px-2">তারিখ</th>
+                <th class="py-3 px-2">বিবরণ</th>
+                <th class="py-3 px-2">ধরন</th>
+                <th class="py-3 px-2 text-right">পরিমাণ</th>
+                <th class="py-3 px-2 text-center">অ্যাকশন</th>
+              </tr>
+            </thead>
+            <tbody id="transactionList" class="divide-y divide-slate-100 dark:divide-slate-700 text-sm">
+              <!-- ডাইনামিকালি এন্ট্রি শো হবে -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ফুটার -->
+  <footer class="mt-12 bg-white dark:bg-slate-800 border-t border-slate-200 dark:border-slate-700 py-6 text-center text-sm text-slate-600 dark:text-slate-400 transition-colors">
+    <div class="max-w-4xl mx-auto px-4 space-y-1">
+      <p class="font-medium">Design By <span class="font-bold text-slate-800 dark:text-slate-200">Ahteshamul Hoque</span></p>
+      <p class="text-xs text-slate-500 dark:text-slate-400">Teacher at Bandarban Collectorate School and College</p>
+      <p class="pt-1">
+        <a href="https://www.facebook.com/Ahtesham.BU.BlackLychee" target="_blank" rel="noopener noreferrer" class="text-emerald-600 dark:text-emerald-400 hover:underline inline-flex items-center gap-1 font-medium text-xs">
+          Facebook Profile ↗
+        </a>
+      </p>
+    </div>
+  </footer>
 
   <!-- জাভাস্ক্রিপ্ট লজিক -->
   <script>
@@ -166,7 +169,7 @@
       const themeIcon = document.getElementById('themeIcon');
 
       // লোকাল স্টোরেজ থেকে ডাটা লোড
-      let transactions = JSON.parse(localStorage.getItem('mimmir_songsar_data')) || [];
+      let transactions = JSON.parse(localStorage.getItem('digital_songsar_data')) || [];
 
       // থিম ম্যানেজমেন্ট (ডার্ক মোড)
       const currentTheme = localStorage.getItem('theme') || 'light';
@@ -192,17 +195,6 @@
       updateUI();
 
       monthFilter.addEventListener('change', updateUI);
-
-      // দ্রুত টেক্সট যোগ করার ফাংশন
-      window.setQuickTag = (tag) => {
-        const titleInput = document.getElementById('title');
-        if(titleInput.value) {
-          titleInput.value = tag + ' - ' + titleInput.value;
-        } else {
-          titleInput.value = tag + ': ';
-        }
-        titleInput.focus();
-      };
 
       // ফর্ম সাবমিট (নতুন এন্ট্রি বা এডিট)
       form.addEventListener('submit', (e) => {
@@ -249,7 +241,7 @@
       }
 
       function saveAndRefresh() {
-        localStorage.setItem('mimmir_songsar_data', JSON.stringify(transactions));
+        localStorage.setItem('digital_songsar_data', JSON.stringify(transactions));
         updateUI();
       }
 
