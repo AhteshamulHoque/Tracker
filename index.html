@@ -20,7 +20,7 @@
       <div class="max-w-4xl mx-auto flex flex-col sm:flex-row justify-between items-center gap-4">
         <div>
           <h1 class="text-3xl font-bold tracking-wide">🏡 ডিজিটাল সংসার</h1>
-          <p class="text-emerald-100 dark:text-emerald-200 text-sm mt-1">দৈনন্দিন আয়-ব্যয়ের সহজ হিসাব</p>
+          <p class="text-emerald-100 dark:text-emerald-200 text-sm mt-1">দৈনন্দিন আয়, ব্যয় ও সঞ্চয়ের সহজ হিসাব</p>
         </div>
         
         <!-- কন্ট্রোলস: ডার্ক মোড ও মাস ফিল্টার -->
@@ -38,22 +38,27 @@
 
     <main class="max-w-4xl mx-auto px-4 mt-8 space-y-8">
 
-      <!-- হিসাবের সামারি কার্ড -->
-      <section class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <!-- মোট আয় -->
-        <div class="bg-white dark:bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-5 shadow-sm transition-colors">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট আয়</p>
-          <p id="totalIncome" class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">৳ 0</p>
+      <!-- হিসাবের সামারি কার্ড (৪ টি কার্ড) -->
+      <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+        <!-- মোট আয় -->
+        <div class="bg-white dark:bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-4 shadow-sm transition-colors">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট আয়</p>
+          <p id="totalIncome" class="text-xl font-bold text-emerald-600 dark:text-emerald-400 mt-2">৳ 0</p>
         </div>
-        <!-- মোট ব্যয় -->
-        <div class="bg-white dark:bg-slate-800 border-l-4 border-rose-500 rounded-xl p-5 shadow-sm transition-colors">
-          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট ব্যয়</p>
-          <p id="totalExpense" class="text-2xl font-bold text-rose-600 dark:text-rose-400 mt-2">৳ 0</p>
+        <!-- মোট ব্যয় -->
+        <div class="bg-white dark:bg-slate-800 border-l-4 border-rose-500 rounded-xl p-4 shadow-sm transition-colors">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট ব্যয়</p>
+          <p id="totalExpense" class="text-xl font-bold text-rose-600 dark:text-rose-400 mt-2">৳ 0</p>
         </div>
-        <!-- অবশিষ্ট/ঘাটতি -->
-        <div id="balanceCard" class="bg-white dark:bg-slate-800 border-l-4 border-blue-500 rounded-xl p-5 shadow-sm transition-colors">
-          <p id="balanceLabel" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">জমা / স্থিতিপত্র</p>
-          <p id="netBalance" class="text-2xl font-bold text-blue-600 dark:text-blue-400 mt-2">৳ 0</p>
+        <!-- মোট সঞ্চয় (Savings) -->
+        <div class="bg-white dark:bg-slate-800 border-l-4 border-indigo-500 rounded-xl p-4 shadow-sm transition-colors">
+          <p class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">মোট সঞ্চয়</p>
+          <p id="totalSavings" class="text-xl font-bold text-indigo-600 dark:text-indigo-400 mt-2">৳ 0</p>
+        </div>
+        <!-- অবশিষ্ট ক্যাশ -->
+        <div id="balanceCard" class="bg-white dark:bg-slate-800 border-l-4 border-blue-500 rounded-xl p-4 shadow-sm transition-colors">
+          <p id="balanceLabel" class="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">অবশিষ্ট ক্যাশ</p>
+          <p id="netBalance" class="text-xl font-bold text-blue-600 dark:text-blue-400 mt-2">৳ 0</p>
         </div>
       </section>
 
@@ -68,7 +73,7 @@
             <!-- বিবরণ -->
             <div class="md:col-span-2">
               <label class="block text-xs font-semibold text-slate-600 dark:text-slate-300 mb-1">বিবরণ</label>
-              <input type="text" id="title" placeholder="বিবরণ লিখুন (যেমন: বাজার খরচ, গাড়ি ভাড়া)" required
+              <input type="text" id="title" placeholder="বিবরণ লিখুন (যেমন: ডিপিএস, বাজার, বেতন)" required
                 class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
             </div>
 
@@ -85,6 +90,7 @@
               <select id="type" required class="w-full border border-slate-300 dark:border-slate-600 dark:bg-slate-700 dark:text-white rounded-lg px-3 py-2 text-sm focus:outline-emerald-600">
                 <option value="expense">ব্যয় (Expense)</option>
                 <option value="income">আয় (Income)</option>
+                <option value="savings">সঞ্চয় (Savings)</option>
               </select>
             </div>
           </div>
@@ -161,6 +167,7 @@
       
       const totalIncomeEl = document.getElementById('totalIncome');
       const totalExpenseEl = document.getElementById('totalExpense');
+      const totalSavingsEl = document.getElementById('totalSavings');
       const netBalanceEl = document.getElementById('netBalance');
       const balanceLabelEl = document.getElementById('balanceLabel');
       const balanceCardEl = document.getElementById('balanceCard');
@@ -168,10 +175,9 @@
       const themeToggle = document.getElementById('themeToggle');
       const themeIcon = document.getElementById('themeIcon');
 
-      // লোকাল স্টোরেজ থেকে ডাটা লোড
       let transactions = JSON.parse(localStorage.getItem('digital_songsar_data')) || [];
 
-      // থিম ম্যানেজমেন্ট (ডার্ক মোড)
+      // থিম ম্যানেজমেন্ট
       const currentTheme = localStorage.getItem('theme') || 'light';
       if (currentTheme === 'dark') {
         document.documentElement.classList.add('dark');
@@ -185,18 +191,15 @@
         themeIcon.textContent = isDark ? '☀️' : '🌙';
       });
 
-      // বর্তমান মাস সেট করা (YYYY-MM)
       const today = new Date();
       const currentMonth = today.toISOString().slice(0, 7);
       monthFilter.value = currentMonth;
       document.getElementById('date').value = today.toISOString().split('T')[0];
 
-      // প্রথমবার UI লোড
       updateUI();
 
       monthFilter.addEventListener('change', updateUI);
 
-      // ফর্ম সাবমিট (নতুন এন্ট্রি বা এডিট)
       form.addEventListener('submit', (e) => {
         e.preventDefault();
 
@@ -249,7 +252,6 @@
         const selectedMonth = monthFilter.value;
         const filteredTransactions = transactions.filter(item => item.date.startsWith(selectedMonth));
 
-        // তারিখ অনুযায়ী সর্টিং (নতুন ডাটা আগে)
         filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
 
         renderTable(filteredTransactions);
@@ -262,26 +264,42 @@
         if (items.length === 0) {
           transactionList.innerHTML = `
             <tr>
-              <td colspan="5" class="text-center py-6 text-slate-400">এই মাসে কোনো হিসাব জমা করা হয়নি।</td>
+              <td colspan="5" class="text-center py-6 text-slate-400">এই মাসে কোনো হিসাব জমা করা হয়নি।</td>
             </tr>`;
           return;
         }
 
         items.forEach(item => {
-          const isIncome = item.type === 'income';
           const tr = document.createElement('tr');
           tr.className = "hover:bg-slate-50 dark:hover:bg-slate-700/50 transition-colors";
+
+          let typeLabel = 'ব্যয়';
+          let typeBadgeClass = 'bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300';
+          let amountClass = 'text-rose-600 dark:text-rose-400';
+          let sign = '-';
+
+          if (item.type === 'income') {
+            typeLabel = 'আয়';
+            typeBadgeClass = 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300';
+            amountClass = 'text-emerald-600 dark:text-emerald-400';
+            sign = '+';
+          } else if (item.type === 'savings') {
+            typeLabel = 'সঞ্চয়';
+            typeBadgeClass = 'bg-indigo-100 dark:bg-indigo-900/50 text-indigo-700 dark:text-indigo-300';
+            amountClass = 'text-indigo-600 dark:text-indigo-400';
+            sign = '🔒';
+          }
 
           tr.innerHTML = `
             <td class="py-3 px-2 text-slate-500 dark:text-slate-400 font-mono text-xs">${item.date}</td>
             <td class="py-3 px-2 font-medium text-slate-800 dark:text-slate-200">${item.title}</td>
             <td class="py-3 px-2">
-              <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${isIncome ? 'bg-emerald-100 dark:bg-emerald-900/50 text-emerald-700 dark:text-emerald-300' : 'bg-rose-100 dark:bg-rose-900/50 text-rose-700 dark:text-rose-300'}">
-                ${isIncome ? 'আয়' : 'ব্যয়'}
+              <span class="px-2 py-0.5 rounded-full text-xs font-semibold ${typeBadgeClass}">
+                ${typeLabel}
               </span>
             </td>
-            <td class="py-3 px-2 text-right font-bold ${isIncome ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-600 dark:text-rose-400'}">
-              ${isIncome ? '+' : '-'} ৳ ${item.amount.toLocaleString()}
+            <td class="py-3 px-2 text-right font-bold ${amountClass}">
+              ${sign} ৳ ${item.amount.toLocaleString()}
             </td>
             <td class="py-3 px-2 text-center space-x-1">
               <button onclick="editTransaction(${item.id})" class="text-blue-500 hover:text-blue-700 font-bold px-1.5 py-1 text-xs transition-colors">
@@ -299,33 +317,37 @@
       function calculateSummary(items) {
         let income = 0;
         let expense = 0;
+        let savings = 0;
 
         items.forEach(item => {
           if (item.type === 'income') {
             income += item.amount;
-          } else {
+          } else if (item.type === 'expense') {
             expense += item.amount;
+          } else if (item.type === 'savings') {
+            savings += item.amount;
           }
         });
 
-        const net = income - expense;
+        // অবশিষ্ট ক্যাশ = আয় - ব্যয় - সঞ্চয়
+        const net = income - expense - savings;
 
         totalIncomeEl.textContent = `৳ ${income.toLocaleString()}`;
         totalExpenseEl.textContent = `৳ ${expense.toLocaleString()}`;
+        totalSavingsEl.textContent = `৳ ${savings.toLocaleString()}`;
         netBalanceEl.textContent = `৳ ${Math.abs(net).toLocaleString()}`;
 
         if (net >= 0) {
-          balanceLabelEl.textContent = 'অবশিষ্ট জমা (Net Savings)';
-          netBalanceEl.className = 'text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-2';
-          balanceCardEl.className = 'bg-white dark:bg-slate-800 border-l-4 border-emerald-500 rounded-xl p-5 shadow-sm transition-colors';
+          balanceLabelEl.textContent = 'অবশিষ্ট ক্যাশ';
+          netBalanceEl.className = 'text-xl font-bold text-blue-600 dark:text-blue-400 mt-2';
+          balanceCardEl.className = 'bg-white dark:bg-slate-800 border-l-4 border-blue-500 rounded-xl p-4 shadow-sm transition-colors';
         } else {
           balanceLabelEl.textContent = 'ঘাটতি (Deficit)';
-          netBalanceEl.className = 'text-2xl font-bold text-rose-600 dark:text-rose-400 mt-2';
-          balanceCardEl.className = 'bg-white dark:bg-slate-800 border-l-4 border-rose-500 rounded-xl p-5 shadow-sm transition-colors';
+          netBalanceEl.className = 'text-xl font-bold text-rose-600 dark:text-rose-400 mt-2';
+          balanceCardEl.className = 'bg-white dark:bg-slate-800 border-l-4 border-rose-500 rounded-xl p-4 shadow-sm transition-colors';
         }
       }
 
-      // এডিট ফাংশন
       window.editTransaction = (id) => {
         const item = transactions.find(t => t.id === id);
         if (!item) return;
@@ -343,7 +365,6 @@
         window.scrollTo({ top: form.offsetTop - 100, behavior: 'smooth' });
       };
 
-      // ডিলিট ফাংশন
       window.deleteTransaction = (id) => {
         if (confirm('আপনি কি এই হিসাবটি মুছে ফেলতে চান?')) {
           transactions = transactions.filter(item => item.id !== id);
